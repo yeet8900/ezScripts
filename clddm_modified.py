@@ -83,7 +83,7 @@ def modifyClddm90(transmitter:Transmitter):
             print("Delta should be numeric")
             continue
         with(open(logfile,"a") as f):
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_90 is {transmitter.clddm_90} microAmps, new CL_DDM_90 is {transmitter.current_DDM} microAmps \n")
+            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_90 is {transmitter.clddm_90} microAmps, new CL_DDM_90 is {transmitter.clddm_90} microAmps \n")
         transmitter.clddm_90= round(new_clddm_90,3)
         print(f"NEW CL_DDM_90 IS  ******* {transmitter.clddm_90}μA ({round(transmitter.current_DDM * 0.1033,3)} %) ******, type \"exit\" to exit ",)
 
@@ -94,14 +94,14 @@ def modifyClddm150(transmitter:Transmitter):
         if user_input.lower() == "exit":
             break
         try:
-            new_clddm_90 = round(float(user_input),3)
+            new_clddm_150 = round(float(user_input),3)
         except ValueError:
             print("Delta should be numeric")
             continue
         with(open(logfile,"a") as f):
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_150 is {transmitter.clddm_90} microAmps, new CL_DDM_90 is {transmitter.current_DDM} microAmps \n")
-        transmitter.clddm_90= round(new_clddm_90,3)
-        print(f"NEW CL_DDM_150 IS  ******* {transmitter.clddm_90}μA ({round(transmitter.current_DDM * 0.1033,3)} %) ******",)
+            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_150 is {transmitter.clddm_150} microAmps, new CL_DDM_90 is {transmitter.clddm_150} microAmps \n")
+        transmitter.clddm_150= round(new_clddm_150,3)
+        print(f"NEW CL_DDM_150 IS  ******* {transmitter.clddm_150}μA ({round(transmitter.clddm_150 * 0.1033,3)} %) ******",)
 
 
 def modifyClddm(transmitter:Transmitter):
@@ -192,7 +192,8 @@ while(True):
             print(f"modifying clddm_90 transmitter1 current value is {transmitters["transmitter1"].clddm_90}")
             modifyClddm90(transmitters["transmitter1"])
         case 4:
-            print("You selected t4 Tx1")
+            print(f"modifying clddm_150 transmitter1 current value is {transmitters["transmitter1"].clddm_150}")
+            modifyClddm150(transmitters["transmitter1"])
         case 5:
             print("You selected t5 Tx1")
         case 6:
@@ -209,7 +210,8 @@ while(True):
             print(f"modifying clddm_90 transmitter2 current value is {transmitters["transmitter2"].clddm_90}")
             modifyClddm90(transmitters["transmitter2"])
         case 10:
-            print("You selected t4 Tx2")
+            print(f"modifying clddm_150 transmitter2 current value is {transmitters["transmitter2"].clddm_150}")
+            modifyClddm150(transmitters["transmitter2"])
         case 11:
             print("You selected t5 Tx2")
         case 12:
