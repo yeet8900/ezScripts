@@ -7,8 +7,8 @@ class Transmitter:
         self.current_DDM = clddm
         self.current_Psb = psb
         self.required_course_width = reqCourseWidth
-        self.width_narrow = 51.48
-        self.width_wide = 36.52
+        self.width_narrow = self.current_Psb + 20 * math.log10(1.18)
+        self.width_wide = self.current_Psb - 20 * math.log10(1.18)
         self.clearance_90 = clearance_90
         self.clearance_150 = clearance_150
         self.category = category
@@ -60,6 +60,36 @@ dataClddmCat3 = [
     (24, 10.22),
     (25, 10.64),
 ]
+
+
+def changeCourseWidth(transmitter:Transmitter, negative: bool):
+    print(f"Specification value @ 18% is {transmitter.width_narrow}  dbm \n")
+    while True:
+        user_input = input('Enter any value (percentage) between 5 to 20, "exit" to exit')
+        if user_input.lower() == "exit":
+            break
+        try:
+            percentValue = round(float(user_input)/100,3)
+            math.log10(percentValue)
+        except ValueError:
+            print("Value should be non-negative")
+            continue
+        increaseValue = 1 + percentValue
+        with(open(logfile,"a") as f):
+            if (negative):
+                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width wide PSB is {transmitter.width_narrow}, change is {user_input}%, new PSB is {transmitter.current_Psb - 20 * math.log10(increaseValue)} \n")
+            else:
+                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width narrow PSB is {transmitter.width_narrow}, change is {user_input}%, new PSB is {transmitter.current_Psb + 20 * math.log10(increaseValue)} \n")
+        
+        if(negative):
+            transmitter.width_wide = transmitter.current_Psb - 20 * math.log10(increaseValue) 
+        else:
+            transmitter.width_narrow = transmitter.current_Psb + 20 * math.log10(increaseValue)
+        transmitter.width_narrow = round(transmitter.width_narrow,3)
+        if(negative):
+            print(f"NEW COURSE WIDTH WIDE PSB IS  ******* {transmitter.width_wide} ******, type \"exit\" to exit ",)
+        else:
+            print(f"NEW COURSE WIDTH NARROW PSB IS  ******* {transmitter.width_narrow} ******, type \"exit\" to exit ",)
 
 def printTable(transmitter:Transmitter):
     print("The list of values are:")
@@ -198,9 +228,9 @@ while(True):
             print(f"modifying clddm_150 transmitter1 current value is {transmitters["transmitter1"].clddm_150}")
             modifyClddm150(transmitters["transmitter1"])
         case 5:
-            print("You selected t5 Tx1")
+            changeCourseWidth(transmitters["transmitter1"],False)
         case 6:
-            print("You selected t6 Tx1")
+            changeCourseWidth(transmitters["transmitter1"],True)
 
         # Tx2
         case 7:
@@ -216,9 +246,9 @@ while(True):
             print(f"modifying clddm_150 transmitter2 current value is {transmitters["transmitter2"].clddm_150}")
             modifyClddm150(transmitters["transmitter2"])
         case 11:
-            print("You selected t5 Tx2")
+            changeCourseWidth(transmitters["transmitter2"],False)
         case 12:
-            print("You selected t6 Tx2")
+            changeCourseWidth(transmitters["transmitter2"],True)
 
         case _:
             print("Invalid choice")
