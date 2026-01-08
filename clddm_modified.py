@@ -258,3 +258,5 @@ while(True):
 
 #todo :
 #change clddm90 output format, mention units, constrain values, shift current val display further down
+# print vals for each parameter in transmitter in the menu
+# change formatting, optimize code
