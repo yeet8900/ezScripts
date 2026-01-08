@@ -16,12 +16,15 @@ class Transmitter:
             case 1:
                 self.clddm_90 = 15.33
                 self.clddm_150= -15.33
+                constraints = [12,20]
             case 2:
                 self.clddm_90 = 11.07
                 self.clddm_150= -11.07
+                constraints = [10,15]
             case _:
                 self.clddm_90 = 8.94
                 self.clddm_150= -8.94
+                constraints = [5,12]
 
         
 dataClddmCat1 = [(31, 13.20),
