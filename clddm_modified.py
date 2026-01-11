@@ -137,7 +137,6 @@ def modifyClddm150(transmitter:Transmitter):
         transmitter.clddm_150= round(new_clddm_150,3)
         print(f"NEW CL_DDM_150 IS  ******* {transmitter.clddm_150}μA ({round(transmitter.clddm_150 * 0.1033,3)} %) ******",)
 
-
 def modifyClddm(transmitter:Transmitter):
     while True:
         user_input = input('enter Delta value (μA) (FIU): ')
@@ -171,10 +170,28 @@ def modifyPsb(transmitter:Transmitter):
         transmitter.current_Psb = round(transmitter.current_Psb,3)
         print(f"NEW PSB IS  ******* {transmitter.current_Psb} ******, type \"exit\" to exit \n",)
 transmitters = {}  
+
 print("enter category (1 or 2 or 3, 3 is default)")
-category = int(input())
+while(True):
+    try:
+        category = (input())
+        category = int(category)
+        break
+    except ValueError:
+        print("Category must be between 1 to 3")
+        
+
+
 print("enter required course width")
-reqCourseWidth = round(float(input()),3)
+
+while(True):
+    try:
+        reqCourseWidth = input()
+        reqCourseWidth = round(float(reqCourseWidth),3)
+        break
+    except ValueError:
+        print("Category must be between 1 to 3")
+
 for a in range(1,3):
     print(f"enter the parameters for transmitter {a} (comma separated) \nexample: initial cl_ddm,initial_psb,clearance_90,clearance_150\n")
     x = input()
@@ -200,22 +217,29 @@ tx2 = transmitters["transmitter2"]
 
 while(True):
     print(
-       f"What do you want to change? Select a number from this menu:\n"
-f"1.  Tx1 clddm         {tx1.current_DDM} μA\n"
-f"2.  Tx1 psb           {tx1.current_Psb} dBm\n"
-f"3.  Tx1 clddm_90      {tx1.clddm_90} μA\n"
-f"4.  Tx1 clddm_150     {tx1.clddm_150} μA\n"
-f"5.  Tx1 width_narrow  {tx1.width_narrow:.2f} dBm\n"
-f"6.  Tx1 width_wide    {tx1.width_wide:.2f} dBm\n"
-f"7.  Tx2 clddm         {tx2.current_DDM} μA\n"
-f"8.  Tx2 psb           {tx2.current_Psb} dBm\n"
-f"9.  Tx2 clddm_90      {tx2.clddm_90} μA\n"
-f"10. Tx2 clddm_150     {tx2.clddm_150} μA\n"
-f"11. Tx2 width_narrow  {tx2.width_narrow:.2f} dBm\n"
-f"12. Tx2 width_wide    {tx2.width_wide:.2f} dBm\n"
-
+    f"What do you want to change? Select a number from this menu:\n"
+    f"1.  Tx1 clddm         {tx1.current_DDM} μA\n"
+    f"2.  Tx1 psb           {tx1.current_Psb} dBm\n"
+    f"3.  Tx1 clddm_90      {tx1.clddm_90} μA\n"
+    f"4.  Tx1 clddm_150     {tx1.clddm_150} μA\n"
+    f"5.  Tx1 width_narrow  {tx1.width_narrow:.2f} dBm\n"
+    f"6.  Tx1 width_wide    {tx1.width_wide:.2f} dBm\n"
+    f"7.  Tx2 clddm         {tx2.current_DDM} μA\n"
+    f"8.  Tx2 psb           {tx2.current_Psb} dBm\n"
+    f"9.  Tx2 clddm_90      {tx2.clddm_90} μA\n"
+    f"10. Tx2 clddm_150     {tx2.clddm_150} μA\n"
+    f"11. Tx2 width_narrow  {tx2.width_narrow:.2f} dBm\n"
+    f"12. Tx2 width_wide    {tx2.width_wide:.2f} dBm\n"
     )
-    choice = int(input())
+    
+    while(True):
+        try:
+            choice = input()
+            choice = int(choice)
+            break
+        except ValueError:
+            print("choice must be a number between 1-12")
+
     match choice:
         case -1:
             print("current states transmitters are:")
