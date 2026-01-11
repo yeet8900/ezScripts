@@ -65,7 +65,7 @@ dataClddmCat3 = [
 def changeCourseWidth(transmitter:Transmitter, negative: bool):
     print(f"Specification value @ 18% is {transmitter.width_narrow}  dbm \n")
     while True:
-        user_input = input('Enter any value (percentage) between 5 to 20, "exit" to exit')
+        user_input = input('Enter any value (percentage) between 5 to 20, "exit" to exit\n')
         if user_input.lower() == "exit":
             break
         try:
@@ -86,10 +86,11 @@ def changeCourseWidth(transmitter:Transmitter, negative: bool):
         else:
             transmitter.width_narrow = transmitter.current_Psb + 20 * math.log10(increaseValue)
         transmitter.width_narrow = round(transmitter.width_narrow,3)
+        transmitter.width_wide = round(transmitter.width_wide,3)
         if(negative):
-            print(f"NEW COURSE WIDTH WIDE PSB IS  ******* {transmitter.width_wide} ******, type \"exit\" to exit ",)
+            print(f"NEW COURSE WIDTH WIDE PSB IS  ******* {transmitter.width_wide} ******, type \"exit\" to exit \n",)
         else:
-            print(f"NEW COURSE WIDTH NARROW PSB IS  ******* {transmitter.width_narrow} ******, type \"exit\" to exit ",)
+            print(f"NEW COURSE WIDTH NARROW PSB IS  ******* {transmitter.width_narrow} ******, type \"exit\" to exit \n",)
 
 def printTable(transmitter:Transmitter):
     print("The list of values are:")
@@ -168,7 +169,7 @@ def modifyPsb(transmitter:Transmitter):
             f.write(f"{datetime.now().time().replace(microsecond=0)} CurrentPSB is {transmitter.current_Psb}, delta is {course_width_FIU}, new PSB is {transmitter.current_Psb + 20 * math.log10(course_width_FIU/transmitter.required_course_width)} \n")
         transmitter.current_Psb = transmitter.current_Psb + 20 * math.log10(course_width_FIU/transmitter.required_course_width) 
         transmitter.current_Psb = round(transmitter.current_Psb,3)
-        print(f"NEW PSB IS  ******* {transmitter.current_Psb} ******, type \"exit\" to exit ",)
+        print(f"NEW PSB IS  ******* {transmitter.current_Psb} ******, type \"exit\" to exit \n",)
 transmitters = {}  
 print("enter category (1 or 2 or 3, 3 is default)")
 category = int(input())
@@ -194,21 +195,25 @@ for a in range(1,3):
         f.write(f"CLDDM 150: {transmitters[f'transmitter{a}'].clddm_150}\n")
         f.write("-------------------------------\n")
 
+tx1 = transmitters["transmitter1"]
+tx2 = transmitters["transmitter2"]
+
 while(True):
     print(
-    "What do you want to change? Select a number from this menu:\n"
-    "1.Tx1 clddm \n"
-    "2.Tx1 psb \n"
-    "3.Tx1 clddm_90 \n"
-    "4.Tx1 clddm_150\n"
-    "5.Tx1 width_narrow\n"
-    "6.Tx1 width_wide\n"
-    "7. Tx2 clddm\n"
-    "8. Tx2 psb\n"
-    "9. Tx2 clddm_90\n"
-    "10. Tx2 clddm_150\n"
-    "11. Tx2 width_narrow\n"
-    "12. Tx2 width_wide\n"
+       f"What do you want to change? Select a number from this menu:\n"
+f"1.  Tx1 clddm         {tx1.current_DDM} μA\n"
+f"2.  Tx1 psb           {tx1.current_Psb} dBm\n"
+f"3.  Tx1 clddm_90      {tx1.clddm_90} μA\n"
+f"4.  Tx1 clddm_150     {tx1.clddm_150} μA\n"
+f"5.  Tx1 width_narrow  {tx1.width_narrow:.2f} dBm\n"
+f"6.  Tx1 width_wide    {tx1.width_wide:.2f} dBm\n"
+f"7.  Tx2 clddm         {tx2.current_DDM} μA\n"
+f"8.  Tx2 psb           {tx2.current_Psb} dBm\n"
+f"9.  Tx2 clddm_90      {tx2.clddm_90} μA\n"
+f"10. Tx2 clddm_150     {tx2.clddm_150} μA\n"
+f"11. Tx2 width_narrow  {tx2.width_narrow:.2f} dBm\n"
+f"12. Tx2 width_wide    {tx2.width_wide:.2f} dBm\n"
+
     )
     choice = int(input())
     match choice:
