@@ -1,15 +1,24 @@
-Transmitter1
-CLDDM: value
-current_Psb: value
-required_course_width: value
-clearance_90: value
-clearance_150: value
-category: value
+transmitter1
+CLDDM: 25.0
+current_Psb: 1.0
+required_course_width: 2.0
+clearance_90: 1.0
+clearance_150: 1.0
+category: 2
+clddm_90: 11.07
+clddm_150: -11.07
+width_narrow: 2.437640146122507
+width_wide: -0.43764014612250723
 
-Transmitter2
-CLDDM: value
-current_Psb: value
-required_course_width: value
-clearance_90: value
-clearance_150: value
-category: value
+transmitter2
+CLDDM: 2.0
+current_Psb: 2.0
+required_course_width: 2.0
+clearance_90: 2.0
+clearance_150: 2.0
+category: 2
+clddm_90: 11.07
+clddm_150: -11.07
+width_narrow: 3.438
+width_wide: 1.914
+

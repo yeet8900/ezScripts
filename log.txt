@@ -1,0 +1,29 @@
+
+--- Initial values for transmitter1 ---
+Current DDM: 1.0
+Current PSB: 1.0
+Required course width: 2.0
+Width narrow: 2.437640146122507
+Width wide: -0.43764014612250723
+Clearance 90: 1.0
+Clearance 150: 1.0
+CLDDM 90: 11.07
+CLDDM 150: -11.07
+-------------------------------
+
+--- Initial values for transmitter2 ---
+Current DDM: 2.0
+Current PSB: 2.0
+Required course width: 2.0
+Width narrow: 3.437640146122507
+Width wide: 0.5623598538774928
+Clearance 90: 2.0
+Clearance 150: 2.0
+CLDDM 90: 11.07
+CLDDM 150: -11.07
+-------------------------------
+07:02:07 Course width wide PSB is 3.437640146122507, change is 16%, new PSB is 0.7108402154616309
+07:03:38 Course width wide PSB is 3.438, change is 1%, new PSB is 1.9135725243471484
+07:03:56 currentDDM is 1.0 microAmps, delta is 12.0 microAmps, new DDM is 13.0 microAmps
+07:04:06 currentDDM is 13.0 microAmps, delta is 12.0 microAmps, new DDM is 25.0 microAmps
+07:16:54 Created transmitter1: DDM=1.0, PSB=20.1
