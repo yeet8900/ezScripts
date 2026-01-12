@@ -266,9 +266,9 @@ transmitters = {}
 if restore == 'y':
     transmitters = loadStateFromFile()
     if transmitters:
-        print("\nInitialized successfully!")
+        print("\nRestored successfully!")
     else:
-        print("Could not initialize, enter new values.")
+        print("Could not restore, enter new values.")
         restore = 'n'
 
 if restore == 'n' or not transmitters:
