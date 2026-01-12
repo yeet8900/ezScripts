@@ -257,7 +257,7 @@ def modifyPsb(transmitter: Transmitter, transmitters):
         transmitter.current_Psb = transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width)
         transmitter.current_Psb = round(transmitter.current_Psb, 3)
         saveStateToFile(transmitters)
-        print(f"NEW PSB IS ******* {transmitter.current_Psb} ******, type \"exit\" to exit\n")
+        print(f"NEW PSB IS {transmitter.current_Psb}, type \"exit\" to exit\n")
 
 # Main program
 print("Initialize with latest values? (y/n)")
