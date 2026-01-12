@@ -109,7 +109,7 @@ def loadStateFromFile():
         
         return transmitters
     except FileNotFoundError:
-        print("No previous state file found.")
+        print("Data file not found.")
         return {}
     except Exception as e:
         print(f"Error loading state: {e}")
