@@ -1,0 +1,15 @@
+Transmitter1
+CLDDM: value
+current_Psb: value
+required_course_width: value
+clearance_90: value
+clearance_150: value
+category: value
+
+Transmitter2
+CLDDM: value
+current_Psb: value
+required_course_width: value
+clearance_90: value
+clearance_150: value
+category: value

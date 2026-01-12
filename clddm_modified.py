@@ -1,6 +1,16 @@
 from datetime import datetime
 import math
 logfile = "log.txt"
+datafile = "state.txt"
+print("do you want to restore to previous state? (y/n)")
+restore = input().lower()
+if restore == 'y':
+    print("restoring previous state is not yet implemented")
+    with open(datafile, "r") as f:
+        lines = f.readlines()
+        # instantiate python objects from text file dbs here.
+
+
 
 class Transmitter:
     def __init__(self, clddm, psb, category,reqCourseWidth,clearance_90,clearance_150):
@@ -16,16 +26,15 @@ class Transmitter:
             case 1:
                 self.clddm_90 = 15.33
                 self.clddm_150= -15.33
-                constraints = [12,20]
+                self.constraints = [12,20]
             case 2:
                 self.clddm_90 = 11.07
                 self.clddm_150= -11.07
-                constraints = [10,15]
+                self.constraints = [10,15]
             case _:
                 self.clddm_90 = 8.94
                 self.clddm_150= -8.94
-                constraints = [5,12]
-
+                self.constraints = [5,12]
         
 dataClddmCat1 = [(31, 13.20),
 (32, 13.63),
@@ -61,6 +70,20 @@ dataClddmCat3 = [
     (25, 10.64),
 ]
 
+
+def logState():
+    with open(logfile, "a") as f:
+        f.write(f"\n--- Initial values for transmitter{a} ---\n")
+        f.write(f"Current DDM: {transmitters[f'transmitter{a}'].current_DDM}\n")
+        f.write(f"Current PSB: {transmitters[f'transmitter{a}'].current_Psb}\n")
+        f.write(f"Required course width: {transmitters[f'transmitter{a}'].required_course_width}\n")
+        f.write(f"Width narrow: {transmitters[f'transmitter{a}'].width_narrow}\n")
+        f.write(f"Width wide: {transmitters[f'transmitter{a}'].width_wide}\n")
+        f.write(f"Clearance 90: {transmitters[f'transmitter{a}'].clearance_90}\n")
+        f.write(f"Clearance 150: {transmitters[f'transmitter{a}'].clearance_150}\n")
+        f.write(f"CLDDM 90: {transmitters[f'transmitter{a}'].clddm_90}\n")
+        f.write(f"CLDDM 150: {transmitters[f'transmitter{a}'].clddm_150}\n")
+        f.write("-------------------------------\n")
 
 def changeCourseWidth(transmitter:Transmitter, negative: bool):
     print(f"Specification value @ 18% is {transmitter.width_narrow}  dbm \n")
@@ -169,51 +192,42 @@ def modifyPsb(transmitter:Transmitter):
         transmitter.current_Psb = transmitter.current_Psb + 20 * math.log10(course_width_FIU/transmitter.required_course_width) 
         transmitter.current_Psb = round(transmitter.current_Psb,3)
         print(f"NEW PSB IS  ******* {transmitter.current_Psb} ******, type \"exit\" to exit \n",)
+
 transmitters = {}  
-
-print("enter category (1 or 2 or 3, 3 is default)")
-while(True):
-    try:
-        category = (input())
-        category = int(category)
-        break
-    except ValueError:
-        print("Category must be between 1 to 3")
-        
-
-
-print("enter required course width")
-
-while(True):
-    try:
-        reqCourseWidth = input()
-        reqCourseWidth = round(float(reqCourseWidth),3)
-        break
-    except ValueError:
-        print("Category must be between 1 to 3")
-
-for a in range(1,3):
-    print(f"enter the parameters for transmitter {a} (comma separated) \nexample: initial cl_ddm,initial_psb,clearance_90,clearance_150\n")
-    x = input()
-    listOfParameters = x.split(",")
-    listOfParameters = [round(float(a),3) for a in listOfParameters]
-    clddm,psb,clearance_90,clearance_150 = listOfParameters
-    transmitters[f"transmitter{a}"]= Transmitter(clddm,psb,category,reqCourseWidth,clearance_90,clearance_150)
-    with open(logfile, "a") as f:
-        f.write(f"\n--- Initial values for transmitter{a} ---\n")
-        f.write(f"Current DDM: {transmitters[f'transmitter{a}'].current_DDM}\n")
-        f.write(f"Current PSB: {transmitters[f'transmitter{a}'].current_Psb}\n")
-        f.write(f"Required course width: {transmitters[f'transmitter{a}'].required_course_width}\n")
-        f.write(f"Width narrow: {transmitters[f'transmitter{a}'].width_narrow}\n")
-        f.write(f"Width wide: {transmitters[f'transmitter{a}'].width_wide}\n")
-        f.write(f"Clearance 90: {transmitters[f'transmitter{a}'].clearance_90}\n")
-        f.write(f"Clearance 150: {transmitters[f'transmitter{a}'].clearance_150}\n")
-        f.write(f"CLDDM 90: {transmitters[f'transmitter{a}'].clddm_90}\n")
-        f.write(f"CLDDM 150: {transmitters[f'transmitter{a}'].clddm_150}\n")
-        f.write("-------------------------------\n")
-
 tx1 = transmitters["transmitter1"]
 tx2 = transmitters["transmitter2"]
+
+
+if( restore == 'n'):
+    print("enter category (1 or 2 or 3, 3 is default)")
+    while(True):
+        try:
+            category = (input())
+            category = int(category)
+            break
+        except ValueError:
+            print("Category must be between 1 to 3")
+
+    print("enter required course width")
+
+    while(True):
+        try:
+            reqCourseWidth = input()
+            reqCourseWidth = round(float(reqCourseWidth),3)
+            break
+        except ValueError:
+            print("Category must be between 1 to 3")
+
+    for a in range(1,3):
+        print(f"enter the parameters for transmitter {a} (comma separated) \nexample: initial cl_ddm,initial_psb,clearance_90,clearance_150\n")
+        x = input()
+        listOfParameters = x.split(",")
+        listOfParameters = [round(float(a),3) for a in listOfParameters]
+        clddm,psb,clearance_90,clearance_150 = listOfParameters
+        transmitters[f"transmitter{a}"]= Transmitter(clddm,psb,category,reqCourseWidth,clearance_90,clearance_150)
+        logState()
+
+
 
 while(True):
     print(
@@ -245,39 +259,39 @@ while(True):
             print("current states transmitters are:")
         # Tx1
         case 1:
-            print(f"modifying clddm transmitter1, current value is {transmitters["transmitter1"].current_DDM} ")
-            modifyClddm(transmitters["transmitter1"])
+            print(f"modifying clddm transmitter1, current value is {tx1.current_DDM} ")
+            modifyClddm(tx1)
         case 2:
-            print(f"modifying psb transmitter1, current value is {transmitters["transmitter1"].current_Psb} ")
-            modifyPsb(transmitters["transmitter1"])
+            print(f"modifying psb transmitter1, current value is {tx1.current_Psb} ")
+            modifyPsb(tx1)
         case 3:
-            print(f"modifying clddm_90 transmitter1 current value is {transmitters["transmitter1"].clddm_90}")
-            modifyClddm90(transmitters["transmitter1"])
+            print(f"modifying clddm_90 transmitter1 current value is {tx1.clddm_90}")
+            modifyClddm90(tx1)
         case 4:
-            print(f"modifying clddm_150 transmitter1 current value is {transmitters["transmitter1"].clddm_150}")
-            modifyClddm150(transmitters["transmitter1"])
+            print(f"modifying clddm_150 transmitter1 current value is {tx1.clddm_150}")
+            modifyClddm150(tx1)
         case 5:
-            changeCourseWidth(transmitters["transmitter1"],False)
+            changeCourseWidth(tx1,False)
         case 6:
-            changeCourseWidth(transmitters["transmitter1"],True)
+            changeCourseWidth(tx1,True)
 
         # Tx2
         case 7:
-            print(f"modifying clddm transmitter2, current value is {transmitters["transmitter2"].current_DDM} ")
-            modifyClddm(transmitters["transmitter2"])
+            print(f"modifying clddm transmitter2, current value is {tx2.current_DDM} ")
+            modifyClddm(tx2)
         case 8:
-            print(f"modifying psb transmitter2, current value is {transmitters["transmitter2"].current_Psb} ")
-            modifyPsb(transmitters["transmitter2"])
+            print(f"modifying psb transmitter2, current value is {tx2.current_Psb} ")
+            modifyPsb(tx2)
         case 9:
-            print(f"modifying clddm_90 transmitter2 current value is {transmitters["transmitter2"].clddm_90}")
-            modifyClddm90(transmitters["transmitter2"])
+            print(f"modifying clddm_90 transmitter2 current value is {tx2.clddm_90}")
+            modifyClddm90(tx2)
         case 10:
-            print(f"modifying clddm_150 transmitter2 current value is {transmitters["transmitter2"].clddm_150}")
-            modifyClddm150(transmitters["transmitter2"])
+            print(f"modifying clddm_150 transmitter2 current value is {tx2.clddm_150}")
+            modifyClddm150(tx2)
         case 11:
-            changeCourseWidth(transmitters["transmitter2"],False)
+            changeCourseWidth(tx2,False)
         case 12:
-            changeCourseWidth(transmitters["transmitter2"],True)
+            changeCourseWidth(tx2,True)
 
         case _:
             print("Invalid choice")
