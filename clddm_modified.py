@@ -260,7 +260,7 @@ def modifyPsb(transmitter: Transmitter, transmitters):
         print(f"NEW PSB IS {transmitter.current_Psb}, type \"exit\" to exit\n")
 
 # Main program
-print("Initialize with latest values? (y/n)")
+print("Restore previous values? (y/n)")
 restore = input().lower()
 transmitters = {}
 if restore == 'y':
