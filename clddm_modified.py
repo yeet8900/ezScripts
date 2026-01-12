@@ -369,10 +369,10 @@ while True:
             print(f"Modifying psb Tx1, current value is {tx1.current_Psb}")
             modifyPsb(tx1, transmitters)
         case 3:
-            print(f"Modifying cl_ddm_90 Tx1 current value is {tx1.clddm_90}")
+            print(f"Modifying cl_ddm_90, Tx1 current value is {tx1.clddm_90}")
             modifyClddm90(tx1, transmitters)
         case 4:
-            print(f"Modifying cl_ddm_150 Tx1 current value is {tx1.clddm_150}")
+            print(f"Modifying cl_ddm_150, Tx1, current value is {tx1.clddm_150}")
             modifyClddm150(tx1, transmitters)
         case 5:
             changeCourseWidth(tx1, False, transmitters)
@@ -385,10 +385,10 @@ while True:
             print(f"Modifying psb Tx2, current value is {tx2.current_Psb}")
             modifyPsb(tx2, transmitters)
         case 9:
-            print(f"Modifying cl_ddm_90 Tx2 current value is {tx2.clddm_90}")
+            print(f"Modifying cl_ddm_90 Tx2, current value is {tx2.clddm_90}")
             modifyClddm90(tx2, transmitters)
         case 10:
-            print(f"Modifying cl_ddm_150 Tx2 current value is {tx2.clddm_150}")
+            print(f"Modifying cl_ddm_150 Tx2, current value is {tx2.clddm_150}")
             modifyClddm150(tx2, transmitters)
         case 11:
             changeCourseWidth(tx2, False, transmitters)
