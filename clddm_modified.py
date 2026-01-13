@@ -150,9 +150,9 @@ def changeCourseWidth(transmitter: Transmitter, negative: bool, transmitters):
         increaseValue = 1 + percentValue
         with open(logfile, "a") as f:
             if negative:
-                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width wide PSB is {transmitter.width_narrow}, change is {user_input}%, new PSB is {transmitter.current_Psb - 20 * math.log10(increaseValue)}\n")
+                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width wide PSB is {round(transmitter.width_narrow,3)}, change is {user_input}%, new PSB is {round(transmitter.current_Psb - 20 * math.log10(increaseValue),3)}\n")
             else:
-                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width narrow PSB is {transmitter.width_narrow}, change is {user_input}%, new PSB is {transmitter.current_Psb + 20 * math.log10(increaseValue)}\n")
+                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width narrow PSB is {round(transmitter.width_narrow,3)}, change is {user_input}%, new PSB is {round(transmitter.current_Psb + 20 * math.log10(increaseValue),3)}\n")
         
         if negative:
             transmitter.width_wide = transmitter.current_Psb - 20 * math.log10(increaseValue)
@@ -195,7 +195,7 @@ def modifyClddm90(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_90 is {transmitter.clddm_90} microAmps, new CL_DDM_90 is {new_clddm_90} microAmps\n")
+            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_90 is {round(transmitter.clddm_90,3)} microAmps, new CL_DDM_90 is {round(new_clddm_90,3)} microAmps\n")
         
         transmitter.clddm_90 = round(new_clddm_90, 3)
         saveStateToFile(transmitters)
@@ -214,7 +214,7 @@ def modifyClddm150(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_150 is {transmitter.clddm_150} microAmps, new CL_DDM_150 is {new_clddm_150} microAmps\n")
+            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_150 is {round(transmitter.clddm_150,3)} microAmps, new CL_DDM_150 is {round(new_clddm_150,3)} microAmps\n")
         
         transmitter.clddm_150 = round(new_clddm_150, 3)
         saveStateToFile(transmitters)
@@ -232,7 +232,7 @@ def modifyClddm(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current DDM value is{transmitter.current_DDM} microAmps, delta is {delta} microAmps, new DDM is {delta + transmitter.current_DDM} microAmps\n")
+            f.write(f"{datetime.now().time().replace(microsecond=0)} current DDM value is{transmitter.current_DDM} microAmps, delta is {delta} microAmps, new DDM is {round(delta + transmitter.current_DDM,3)} microAmps\n")
         
         transmitter.current_DDM = delta + transmitter.current_DDM
         transmitter.current_DDM = round(transmitter.current_DDM, 3)
@@ -252,7 +252,7 @@ def modifyPsb(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} CurrentPSB is {transmitter.current_Psb}, delta is {course_width_FIU}, new PSB is {transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width)}\n")
+            f.write(f"{datetime.now().time().replace(microsecond=0)} CurrentPSB is {transmitter.current_Psb}, delta is {course_width_FIU}, new PSB is {round(transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width),3)}\n")
         
         transmitter.current_Psb = transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width)
         transmitter.current_Psb = round(transmitter.current_Psb, 3)
