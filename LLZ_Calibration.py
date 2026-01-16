@@ -292,10 +292,10 @@ if restore == 'n' or not transmitters:
     while True:
         try:
             category = int(input())
-            if category <1 and category <3:
+            if category >=1 and category <3:
                 break
             else:
-                print("Category should be either 1 or 2 or 3.")
+                print("Category should be either 1 or 2 or 3. Re-enter category.")
                 continue
         except ValueError:
             print("Category must be between 1 to 3")
@@ -306,7 +306,7 @@ if restore == 'n' or not transmitters:
             reqCourseWidth = round(float(input()), 3)
             break
         except ValueError:
-            print("Course width must be numeric")
+            print("Course width must be numeric, re-enter course width")
 
     for a in range(1, 3):
         print(f"\n=== Initializing values for Tx{a} ===")
@@ -315,37 +315,37 @@ if restore == 'n' or not transmitters:
                 clddm = round(float(input("Enter CL_DDM (μA): ")), 3)
                 break
             except ValueError:
-                print("Error: CL_DDM must be a numeric value")
+                print("Error: CL_DDM must be a numeric value,re-enter CL_DDM")
         
         while True:
             try:
                 psb = round(float(input("Enter PSB (dbm): ")), 3)
                 if psb <= 0:
-                    print("Error: PSB must be positive")
+                    print("Error: PSB must be positive,re-enter PSB")
                     continue
                 break
             except ValueError:
-                print("Error: PSB must be a numeric value")
+                print("Error: PSB must be a numeric value, re-enter PSB")
 
         while True:
             try:
                 clearance_90 = round(float(input("Enter clearance 90 (μA): ")), 3)
                 if clearance_90 <= 0:
-                    print("Error: Clearance must be positive")
+                    print("Error: Clearance must be positive, re-enter clearance 90")
                     continue
                 break
             except ValueError:
-                print("Error: Clearance must be a numeric value")
+                print("Error: Clearance must be a numeric value, re-enter clearance 90")
 
         while True:
             try:
                 clearance_150 = round(float(input("Enter clearance 150 (μA): ")), 3)
                 if clearance_150 <= 0:
-                    print("Error: Clearance must be positive")
+                    print("Error: Clearance must be positive, re-enter clearance 150")
                     continue
                 break
             except ValueError:
-                print("Error: Clearance must be a numeric value")
+                print("Error: Clearance must be a numeric value, re-enter clearance 150")
         
         transmitters[f"transmitter{a}"] = Transmitter(clddm, psb, category, reqCourseWidth, clearance_90, clearance_150)
         print(f"\nTx{a} initialized successfully!")
