@@ -170,8 +170,8 @@ def changeCourseWidth(transmitter: Transmitter, negative: bool, transmitters):
             print(f"NEW COURSE WIDTH NARROW PSB IS {transmitter.width_narrow}, type \"exit\" to exit\n")
 
 def printTable(transmitter: Transmitter):
-    print("The possible values for this category are:")
-    print(f"{'Displacement':<14}{'μA':>10}")
+    print("Look up table for this category\n")
+    print(f"{'Displacement(feet)':<14}{'DDM(μA)':>10}")
     if transmitter.category == 1:
         data = dataClddmCat1
     elif transmitter.category == 2:
@@ -181,10 +181,10 @@ def printTable(transmitter: Transmitter):
 
     for feet, microamps in data:
         print(f"{feet:<2}'{'':<11}{microamps:>10.2f}")
-    print("/n")
+    
 
 def printTableNegative(transmitter: Transmitter):
-    print("\nThe possible values for this category are:")
+    print("\nLook up table for this category\n")
     print(f"{'Displacement':<14}{'μA':>10}")
     if transmitter.category == 1:
         data = dataClddmCat1
@@ -195,13 +195,13 @@ def printTableNegative(transmitter: Transmitter):
 
     for feet, microamps in data:
         print(f"{feet:<2}'{'':<11}{-microamps:>10.2f}")
-    print("\n")
+    
 
 
 def modifyClddm90(transmitter: Transmitter, transmitters):
     while True:
         printTable(transmitter)
-        user_input = input('Enter new value (μA) chosen to  update and log CL_DDM_90, type "exit" to exit\n')
+        user_input = input('\nEnter new value (μA) chosen to  update and log CL_DDM_90, type "exit" to exit\n')
         if user_input.lower() == "exit":
             break
         try:
@@ -220,7 +220,7 @@ def modifyClddm90(transmitter: Transmitter, transmitters):
 def modifyClddm150(transmitter: Transmitter, transmitters):
     while True:
         printTableNegative(transmitter)
-        user_input = input('Enter new value (μA) chosen to  update and log CL_DDM_150, type "exit" to exit\n')
+        user_input = input('\nEnter new value (μA) chosen to  update and log CL_DDM_150, type "exit" to exit\n')
         if user_input.lower() == "exit":
             break
         try:
@@ -264,7 +264,7 @@ def modifyPsb(transmitter: Transmitter, transmitters):
             course_width_FIU = round(float(user_input), 3)
             math.log10(course_width_FIU)
         except ValueError:
-            print("Course width should be numeric and non-negative")
+            print("Course width should be numeric and positive")
             continue
         
         with open(logfile, "a") as f:
@@ -292,7 +292,7 @@ if restore == 'n' or not transmitters:
     while True:
         try:
             category = int(input())
-            if category >=1 and category <3:
+            if category >=1 and category <=3:
                 break
             else:
                 print("Category should be either 1 or 2 or 3. Re-enter category.")
@@ -358,7 +358,10 @@ tx2 = transmitters["transmitter2"]
 
 # Main loop
 while True:
-    print(f"\n    Parameter       Current Value"
+    print(          f"\nCategory                 {tx1.category}  "
+        f"\nCourse Width            {tx1.required_course_width}\n"    
+        f"\n    Parameter       Current Value"
+
         f"\n1.  Tx1 cl_ddm         {tx1.current_DDM} μA\n"
         f"2.  Tx1 psb            {tx1.current_Psb} dbm\n"
         f"3.  Tx1 cl_ddm_90      {tx1.clddm_90} μA\n"
@@ -371,7 +374,7 @@ while True:
         f"10. Tx2 cl_ddm_150     {tx2.clddm_150} μA\n"
         f"11. Tx2 width_narrow   {tx2.width_narrow:.3f} dbm\n"
         f"12. Tx2 width_wide     {tx2.width_wide:.3f} dbm\n"
-        f"\nSelect parameter number to modify from the above menu:\n"
+        f"\nSelect parameter number to modify from the above menu:"
     )
 
     while True:
@@ -383,32 +386,32 @@ while True:
 
     match choice:
         case 1:
-            print(f"Modifying cl_ddm Tx1, current value is {tx1.current_DDM}\n")
+            print(f"\n*** Modifying cl_ddm Tx1, current value is  {tx1.current_DDM}μA ***\n")
             modifyClddm(tx1, transmitters)
         case 2:
-            print(f"Modifying psb Tx1, current value is {tx1.current_Psb}\n")
+            print(f"\n*** Modifying psb Tx1, current value is  {tx1.current_Psb}dbm ***\n")
             modifyPsb(tx1, transmitters)
         case 3:
-            print(f"CL_DDM_90 Tx1, alarm limit for category {tx1.category}  is {tx1.clddm_90}\n")
+            print(f"\n*** CL_DDM_90 Tx1, alarm limit for category {tx1.category}  is  {tx1.clddm_90}μA ***\n")
             modifyClddm90(tx1, transmitters)
         case 4:
-            print(f"CL_DDM_150 Tx1, alarm limit for category {tx1.category} is {tx1.clddm_150}\n")
+            print(f"\n*** CL_DDM_150 Tx1, alarm limit for category {tx1.category} is  {tx1.clddm_150}μA ***\n")
             modifyClddm150(tx1, transmitters)
         case 5:
             changeCourseWidth(tx1, False, transmitters)
         case 6:
             changeCourseWidth(tx1, True, transmitters)
         case 7:
-            print(f"Modifying cl_ddm Tx2, current value is {tx2.current_DDM}\n")
+            print(f"\n*** Modifying cl_ddm Tx2, current value is  {tx2.current_DDM}μA ***\n")
             modifyClddm(tx2, transmitters)
         case 8:
-            print(f"Modifying psb Tx2, current value is {tx2.current_Psb}\n")
+            print(f"\n*** Modifying psb Tx2, current value is  {tx2.current_Psb}dbm ***\n")
             modifyPsb(tx2, transmitters)
         case 9:
-            print(f"CL_DDM_90 Tx2, alarm limit for category {tx2.category}  is {tx2.clddm_90}\n")
+            print(f"\n*** CL_DDM_90 Tx2, alarm limit for category {tx2.category}  is  {tx2.clddm_90}μA ***\n")
             modifyClddm90(tx2, transmitters)
         case 10:
-            print(f"CL_DDM_150 Tx2, alarm limit for category {tx2.category}  is {tx2.clddm_150}\n")
+            print(f"\n*** CL_DDM_150 Tx2, alarm limit for category {tx2.category}  is  {tx2.clddm_150}μA  ***\n")
             modifyClddm150(tx2, transmitters)
         case 11:
             changeCourseWidth(tx2, False, transmitters)
