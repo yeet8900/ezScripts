@@ -137,9 +137,11 @@ def changeCourseWidth(transmitter: Transmitter, negative: bool, transmitters):
     else:
         print(f"Specification value @ 18% is {transmitter.width_narrow} dbm\n")
     while True:
-        user_input = input('Enter any value (percentage) between 5 to 20, "exit" to exit\n')
+        user_input = input('Enter any value (percentage) between 5 to 20, "exit" to exit, "tg" to switch transmitter\n')
         if user_input.lower() == "exit":
             break
+        if user_input.lower() == "tg":
+            return "tg"
         try:
             percentValue = round(float(user_input) / 100, 3)
             math.log10(percentValue)
@@ -165,9 +167,9 @@ def changeCourseWidth(transmitter: Transmitter, negative: bool, transmitters):
         saveStateToFile(transmitters)
         
         if negative:
-            print(f"NEW COURSE WIDTH WIDE PSB IS {transmitter.width_wide}, type \"exit\" to exit\n")
+            print(f"NEW COURSE WIDTH WIDE PSB IS {transmitter.width_wide}, type \"exit\" to exit, \"tg\" to switch transmitter\n")
         else:
-            print(f"NEW COURSE WIDTH NARROW PSB IS {transmitter.width_narrow}, type \"exit\" to exit\n")
+            print(f"NEW COURSE WIDTH NARROW PSB IS {transmitter.width_narrow}, type \"exit\" to exit, \"tg\" to switch transmitter\n")
 
 def printTable(transmitter: Transmitter):
     print("The possible values for this category are:")
@@ -201,9 +203,11 @@ def printTableNegative(transmitter: Transmitter):
 def modifyClddm90(transmitter: Transmitter, transmitters):
     while True:
         printTable(transmitter)
-        user_input = input('Enter new value (μA) chosen to  update and log CL_DDM_90, type "exit" to exit\n')
+        user_input = input('Enter new value (μA) chosen to  update and log CL_DDM_90, type "exit" to exit, "tg" to switch transmitter\n')
         if user_input.lower() == "exit":
             break
+        if user_input.lower() == "tg":
+            return "tg"
         try:
             new_clddm_90 = round(float(user_input), 3)
         except ValueError:
@@ -220,9 +224,11 @@ def modifyClddm90(transmitter: Transmitter, transmitters):
 def modifyClddm150(transmitter: Transmitter, transmitters):
     while True:
         printTableNegative(transmitter)
-        user_input = input('Enter new value (μA) chosen to  update and log CL_DDM_150, type "exit" to exit\n')
+        user_input = input('Enter new value (μA) chosen to  update and log CL_DDM_150, type "exit" to exit, "tg" to switch transmitter\n')
         if user_input.lower() == "exit":
             break
+        if user_input.lower() == "tg":
+            return "tg"
         try:
             new_clddm_150 = round(float(user_input), 3)
         except ValueError:
@@ -241,6 +247,8 @@ def modifyClddm(transmitter: Transmitter, transmitters):
         user_input = input('Enter Delta value (μA) (FIU): ')
         if user_input.lower() == "exit":
             break
+        if user_input.lower() == "tg":
+            return "tg"
         try:
             delta = round(float(user_input), 3)
         except ValueError:
@@ -253,13 +261,15 @@ def modifyClddm(transmitter: Transmitter, transmitters):
         transmitter.current_DDM = delta + transmitter.current_DDM
         transmitter.current_DDM = round(transmitter.current_DDM, 3)
         saveStateToFile(transmitters)
-        print(f"NEW DDM IS {transmitter.current_DDM}μA ({round(transmitter.current_DDM * 0.1033, 3)}%), type \"exit\" to exit\n")
+        print(f"NEW DDM IS {transmitter.current_DDM}μA ({round(transmitter.current_DDM * 0.1033, 3)}%), type \"exit\" to exit, \"tg\" to switch transmitter\n")
 
 def modifyPsb(transmitter: Transmitter, transmitters):
     while True:
         user_input = input('Enter course width value (in degrees) (FIU): ')
-        if user_input.lower() == "exit":
+        if user_input.lower() == "exit": 
             break
+        if user_input.lower() == "tg":
+            return "tg"
         try:
             course_width_FIU = round(float(user_input), 3)
             math.log10(course_width_FIU)
@@ -273,7 +283,7 @@ def modifyPsb(transmitter: Transmitter, transmitters):
         transmitter.current_Psb = transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width)
         transmitter.current_Psb = round(transmitter.current_Psb, 3)
         saveStateToFile(transmitters)
-        print(f"NEW PSB IS {transmitter.current_Psb}, type \"exit\" to exit\n")
+        print(f"NEW PSB IS {transmitter.current_Psb}, type \"exit\" to exit, \"tg\" to switch transmitter\n")
 
 # Main program
 print("Restore previous values? (y/n)")
@@ -292,7 +302,7 @@ if restore == 'n' or not transmitters:
     while True:
         try:
             category = int(input())
-            if category <1 and category <3:
+            if 1 <= category <= 3:
                 break
             else:
                 print("Category should be either 1 or 2 or 3.")
@@ -358,61 +368,71 @@ tx2 = transmitters["transmitter2"]
 
 # Main loop
 while True:
-    print(f"\n    Parameter       Current Value"
-        f"\n1.  Tx1 cl_ddm         {tx1.current_DDM} μA\n"
-        f"2.  Tx1 psb            {tx1.current_Psb} dbm\n"
-        f"3.  Tx1 cl_ddm_90      {tx1.clddm_90} μA\n"
-        f"4.  Tx1 cl_ddm_150     {tx1.clddm_150} μA\n"
-        f"5.  Tx1 width_narrow   {tx1.width_narrow:.3f} dbm\n"
-        f"6.  Tx1 width_wide     {tx1.width_wide:.3f} dbm\n"
-        f"7.  Tx2 cl_ddm         {tx2.current_DDM} μA\n"
-        f"8.  Tx2 psb            {tx2.current_Psb} dbm\n"
-        f"9.  Tx2 cl_ddm_90      {tx2.clddm_90} μA\n"
-        f"10. Tx2 cl_ddm_150     {tx2.clddm_150} μA\n"
-        f"11. Tx2 width_narrow   {tx2.width_narrow:.3f} dbm\n"
-        f"12. Tx2 width_wide     {tx2.width_wide:.3f} dbm\n"
-        f"\nSelect parameter number to modify from the above menu:\n"
+    print(f"\n1.  Tx1\n"
+        f"2.  Tx2\n"
+        f"\nSelect transmitter number:\n"
     )
 
     while True:
         try:
-            choice = int(input())
+            tx_choice = int(input())
+            if tx_choice not in (1, 2):
+                raise ValueError
             break
         except ValueError:
-            print("Choice must be a number between 1-12")
+            print("Choice must be a number between 1-2")
 
-    match choice:
-        case 1:
-            print(f"Modifying cl_ddm Tx1, current value is {tx1.current_DDM}\n")
-            modifyClddm(tx1, transmitters)
-        case 2:
-            print(f"Modifying psb Tx1, current value is {tx1.current_Psb}\n")
-            modifyPsb(tx1, transmitters)
-        case 3:
-            print(f"CL_DDM_90 Tx1, alarm limit for category {tx1.category}  is {tx1.clddm_90}\n")
-            modifyClddm90(tx1, transmitters)
-        case 4:
-            print(f"CL_DDM_150 Tx1, alarm limit for category {tx1.category} is {tx1.clddm_150}\n")
-            modifyClddm150(tx1, transmitters)
-        case 5:
-            changeCourseWidth(tx1, False, transmitters)
-        case 6:
-            changeCourseWidth(tx1, True, transmitters)
-        case 7:
-            print(f"Modifying cl_ddm Tx2, current value is {tx2.current_DDM}\n")
-            modifyClddm(tx2, transmitters)
-        case 8:
-            print(f"Modifying psb Tx2, current value is {tx2.current_Psb}\n")
-            modifyPsb(tx2, transmitters)
-        case 9:
-            print(f"CL_DDM_90 Tx2, alarm limit for category {tx2.category}  is {tx2.clddm_90}\n")
-            modifyClddm90(tx2, transmitters)
-        case 10:
-            print(f"CL_DDM_150 Tx2, alarm limit for category {tx2.category}  is {tx2.clddm_150}\n")
-            modifyClddm150(tx2, transmitters)
-        case 11:
-            changeCourseWidth(tx2, False, transmitters)
-        case 12:
-            changeCourseWidth(tx2, True, transmitters)
-        case _:
-            print("Invalid choice")
+    while True:
+        tx = tx1 if tx_choice == 1 else tx2
+        tx_name = f"Tx{tx_choice}"
+
+        print(f"\n    Parameter       Current Value"
+            f"\n1.  {tx_name} cl_ddm         {tx.current_DDM} μA\n"
+            f"2.  {tx_name} psb            {tx.current_Psb} dbm\n"
+            f"3.  {tx_name} cl_ddm_90      {tx.clddm_90} μA\n"
+            f"4.  {tx_name} cl_ddm_150     {tx.clddm_150} μA\n"
+            f"5.  {tx_name} width_narrow   {tx.width_narrow:.3f} dbm\n"
+            f"6.  {tx_name} width_wide     {tx.width_wide:.3f} dbm\n"
+            f"\nSelect parameter number to modify from the above menu, \"tg\" to switch transmitter:\n"
+        )
+
+        user_input = input()
+        if user_input.strip().lower() == "tg":
+            tx_choice = 2 if tx_choice == 1 else 1
+            print(f"\nSwitched to Tx{tx_choice}")
+            continue
+        try:
+            choice = int(user_input)
+        except ValueError:
+            print("Choice must be a number between 1-6, \"tg\" to switch transmitter")
+            continue
+        if not 1 <= choice <= 6:
+            print("Choice must be a number between 1-6")
+            continue
+
+        result = None
+        match choice:
+            case 1:
+                print(f"Modifying cl_ddm {tx_name}, current value is {tx.current_DDM}\n")
+                result = modifyClddm(tx, transmitters)
+            case 2:
+                print(f"Modifying psb {tx_name}, current value is {tx.current_Psb}\n")
+                result = modifyPsb(tx, transmitters)
+            case 3:
+                print(f"CL_DDM_90 {tx_name}, alarm limit for category {tx.category}  is {tx.clddm_90}\n")
+                result = modifyClddm90(tx, transmitters)
+            case 4:
+                print(f"CL_DDM_150 {tx_name}, alarm limit for category {tx.category} is {tx.clddm_150}\n")
+                result = modifyClddm150(tx, transmitters)
+            case 5:
+                result = changeCourseWidth(tx, False, transmitters)
+            case 6:
+                result = changeCourseWidth(tx, True, transmitters)
+            case _:
+                print("Invalid choice")
+
+        if result == "tg":
+            tx_choice = 2 if tx_choice == 1 else 1
+            print(f"\nSwitched to Tx{tx_choice}")
+            continue
+        break
