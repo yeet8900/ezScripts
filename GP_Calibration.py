@@ -382,6 +382,8 @@ while True:
         except ValueError:
             print("Choice must be a number between 1-2")
 
+    print(f"\nModifying Tx{tx_choice}")
+
     while True:
         tx = tx1 if tx_choice == 1 else tx2
         tx_name = f"Tx{tx_choice}"
