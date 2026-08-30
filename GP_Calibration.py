@@ -6,6 +6,7 @@ datafile = "data"
 
 class Transmitter:
     def __init__(self, clddm, psb, category, reqCourseWidth, clearance_90, clearance_150):
+        self.name = "Tx?"
         self.current_DDM = clddm
         self.current_Psb = psb
         self.required_course_width = reqCourseWidth
@@ -77,6 +78,7 @@ def loadStateFromFile():
                         tx_data['clearance_90'],
                         tx_data['clearance_150']
                     )
+                    transmitters[current_tx].name = current_tx.replace("transmitter", "Tx")
                     transmitters[current_tx].clddm_90 = tx_data['clddm_90']
                     transmitters[current_tx].clddm_150 = tx_data['clddm_150']
                     transmitters[current_tx].width_narrow = tx_data['width_narrow']
@@ -102,6 +104,7 @@ def loadStateFromFile():
                 tx_data['clearance_90'],
                 tx_data['clearance_150']
             )
+            transmitters[current_tx].name = current_tx.replace("transmitter", "Tx")
             transmitters[current_tx].clddm_90 = tx_data['clddm_90']
             transmitters[current_tx].clddm_150 = tx_data['clddm_150']
             transmitters[current_tx].width_narrow = tx_data['width_narrow']
@@ -120,15 +123,15 @@ def logState(transmitters, tx_name):
     with open(logfile, "a") as f:
         f.write(f"\n--- Initial values for {tx_name} ---\n")
         tx = transmitters[tx_name]
-        f.write(f"Current DDM: {tx.current_DDM}\n")
-        f.write(f"Current PSB: {tx.current_Psb}\n")
-        f.write(f"Required course width: {tx.required_course_width}\n")
-        f.write(f"Width narrow: {tx.width_narrow}\n")
-        f.write(f"Width wide: {tx.width_wide}\n")
-        f.write(f"Clearance 90: {tx.clearance_90}\n")
-        f.write(f"Clearance 150: {tx.clearance_150}\n")
-        f.write(f"CLDDM 90: {tx.clddm_90}\n")
-        f.write(f"CLDDM 150: {tx.clddm_150}\n")
+        f.write(f"{tx.name} Current DDM: {tx.current_DDM}\n")
+        f.write(f"{tx.name} Current PSB: {tx.current_Psb}\n")
+        f.write(f"{tx.name} Required course width: {tx.required_course_width}\n")
+        f.write(f"{tx.name} Width narrow: {tx.width_narrow}\n")
+        f.write(f"{tx.name} Width wide: {tx.width_wide}\n")
+        f.write(f"{tx.name} Clearance 90: {tx.clearance_90}\n")
+        f.write(f"{tx.name} Clearance 150: {tx.clearance_150}\n")
+        f.write(f"{tx.name} CLDDM 90: {tx.clddm_90}\n")
+        f.write(f"{tx.name} CLDDM 150: {tx.clddm_150}\n")
         f.write("--------------\n")
 
 def changeCourseWidth(transmitter: Transmitter, negative: bool, transmitters):
@@ -152,9 +155,9 @@ def changeCourseWidth(transmitter: Transmitter, negative: bool, transmitters):
         increaseValue = 1 + percentValue
         with open(logfile, "a") as f:
             if negative:
-                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width wide PSB is {round(transmitter.width_narrow,3)}, change is {user_input}%, new PSB is {round(transmitter.current_Psb - 20 * math.log10(increaseValue),3)}\n")
+                f.write(f"{transmitter.name} {datetime.now().time().replace(microsecond=0)} Course width wide PSB is {round(transmitter.width_narrow,3)}, change is {user_input}%, new PSB is {round(transmitter.current_Psb - 20 * math.log10(increaseValue),3)}\n")
             else:
-                f.write(f"{datetime.now().time().replace(microsecond=0)} Course width narrow PSB is {round(transmitter.width_narrow,3)}, change is {user_input}%, new PSB is {round(transmitter.current_Psb + 20 * math.log10(increaseValue),3)}\n")
+                f.write(f"{transmitter.name} {datetime.now().time().replace(microsecond=0)} Course width narrow PSB is {round(transmitter.width_narrow,3)}, change is {user_input}%, new PSB is {round(transmitter.current_Psb + 20 * math.log10(increaseValue),3)}\n")
         
         if negative:
             transmitter.width_wide = transmitter.current_Psb - 20 * math.log10(increaseValue)
@@ -215,7 +218,7 @@ def modifyClddm90(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_90 is {round(transmitter.clddm_90,3)} microAmps, new CL_DDM_90 is {round(new_clddm_90,3)} microAmps\n")
+            f.write(f"{transmitter.name} {datetime.now().time().replace(microsecond=0)} current CL_DDM_90 is {round(transmitter.clddm_90,3)} microAmps, new CL_DDM_90 is {round(new_clddm_90,3)} microAmps\n")
         
         transmitter.clddm_90 = round(new_clddm_90, 3)
         saveStateToFile(transmitters)
@@ -236,7 +239,7 @@ def modifyClddm150(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current CL_DDM_150 is {round(transmitter.clddm_150,3)} microAmps, new CL_DDM_150 is {round(new_clddm_150,3)} microAmps\n")
+            f.write(f"{transmitter.name} {datetime.now().time().replace(microsecond=0)} current CL_DDM_150 is {round(transmitter.clddm_150,3)} microAmps, new CL_DDM_150 is {round(new_clddm_150,3)} microAmps\n")
         
         transmitter.clddm_150 = round(new_clddm_150, 3)
         saveStateToFile(transmitters)
@@ -256,7 +259,7 @@ def modifyClddm(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} current DDM value is{transmitter.current_DDM} microAmps, delta is {delta} microAmps, new DDM is {round(delta + transmitter.current_DDM,3)} microAmps\n")
+            f.write(f"{transmitter.name} {datetime.now().time().replace(microsecond=0)} current DDM value is{transmitter.current_DDM} microAmps, delta is {delta} microAmps, new DDM is {round(delta + transmitter.current_DDM,3)} microAmps\n")
         
         transmitter.current_DDM = delta + transmitter.current_DDM
         transmitter.current_DDM = round(transmitter.current_DDM, 3)
@@ -278,7 +281,7 @@ def modifyPsb(transmitter: Transmitter, transmitters):
             continue
         
         with open(logfile, "a") as f:
-            f.write(f"{datetime.now().time().replace(microsecond=0)} CurrentPSB is {transmitter.current_Psb}, delta is {course_width_FIU}, new PSB is {round(transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width),3)}\n")
+            f.write(f"{transmitter.name} {datetime.now().time().replace(microsecond=0)} CurrentPSB is {transmitter.current_Psb}, delta is {course_width_FIU}, new PSB is {round(transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width),3)}\n")
         
         transmitter.current_Psb = transmitter.current_Psb + 20 * math.log10(course_width_FIU / transmitter.required_course_width)
         transmitter.current_Psb = round(transmitter.current_Psb, 3)
@@ -358,6 +361,7 @@ if restore == 'n' or not transmitters:
                 print("Error: Clearance must be a numeric value")
         
         transmitters[f"transmitter{a}"] = Transmitter(clddm, psb, category, reqCourseWidth, clearance_90, clearance_150)
+        transmitters[f"transmitter{a}"].name = f"Tx{a}"
         print(f"\nTx{a} initialized successfully!")
         logState(transmitters, f"transmitter{a}")
     
