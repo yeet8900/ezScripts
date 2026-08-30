@@ -371,74 +371,71 @@ tx1 = transmitters["transmitter1"]
 tx2 = transmitters["transmitter2"]
 
 # Main loop
+print(f"\n1.  Tx1\n"
+    f"2.  Tx2\n"
+    f"\nSelect transmitter number:\n"
+)
+
 while True:
-    print(f"\n1.  Tx1\n"
-        f"2.  Tx2\n"
-        f"\nSelect transmitter number:\n"
+    try:
+        tx_choice = int(input())
+        if tx_choice not in (1, 2):
+            raise ValueError
+        break
+    except ValueError:
+        print("Choice must be a number between 1-2")
+
+print(f"\nModifying Tx{tx_choice}")
+
+while True:
+    tx = tx1 if tx_choice == 1 else tx2
+    tx_name = f"Tx{tx_choice}"
+
+    print(f"\n    Parameter       Current Value"
+        f"\n1.  {tx_name} cl_ddm         {tx.current_DDM} μA\n"
+        f"2.  {tx_name} psb            {tx.current_Psb} dbm\n"
+        f"3.  {tx_name} cl_ddm_90      {tx.clddm_90} μA\n"
+        f"4.  {tx_name} cl_ddm_150     {tx.clddm_150} μA\n"
+        f"5.  {tx_name} width_narrow   {tx.width_narrow:.3f} dbm\n"
+        f"6.  {tx_name} width_wide     {tx.width_wide:.3f} dbm\n"
+        f"\nSelect parameter number to modify from the above menu, \"tg\" to switch transmitter:\n"
     )
 
-    while True:
-        try:
-            tx_choice = int(input())
-            if tx_choice not in (1, 2):
-                raise ValueError
-            break
-        except ValueError:
-            print("Choice must be a number between 1-2")
+    user_input = input()
+    if user_input.strip().lower() == "tg":
+        tx_choice = 2 if tx_choice == 1 else 1
+        print(f"\nSwitched to Tx{tx_choice}")
+        continue
+    try:
+        choice = int(user_input)
+    except ValueError:
+        print("Choice must be a number between 1-6, \"tg\" to switch transmitter")
+        continue
+    if not 1 <= choice <= 6:
+        print("Choice must be a number between 1-6")
+        continue
 
-    print(f"\nModifying Tx{tx_choice}")
+    result = None
+    match choice:
+        case 1:
+            print(f"Modifying cl_ddm {tx_name}, current value is {tx.current_DDM}\n")
+            result = modifyClddm(tx, transmitters)
+        case 2:
+            print(f"Modifying psb {tx_name}, current value is {tx.current_Psb}\n")
+            result = modifyPsb(tx, transmitters)
+        case 3:
+            print(f"CL_DDM_90 {tx_name}, alarm limit for category {tx.category}  is {tx.clddm_90}\n")
+            result = modifyClddm90(tx, transmitters)
+        case 4:
+            print(f"CL_DDM_150 {tx_name}, alarm limit for category {tx.category} is {tx.clddm_150}\n")
+            result = modifyClddm150(tx, transmitters)
+        case 5:
+            result = changeCourseWidth(tx, False, transmitters)
+        case 6:
+            result = changeCourseWidth(tx, True, transmitters)
+        case _:
+            print("Invalid choice")
 
-    while True:
-        tx = tx1 if tx_choice == 1 else tx2
-        tx_name = f"Tx{tx_choice}"
-
-        print(f"\n    Parameter       Current Value"
-            f"\n1.  {tx_name} cl_ddm         {tx.current_DDM} μA\n"
-            f"2.  {tx_name} psb            {tx.current_Psb} dbm\n"
-            f"3.  {tx_name} cl_ddm_90      {tx.clddm_90} μA\n"
-            f"4.  {tx_name} cl_ddm_150     {tx.clddm_150} μA\n"
-            f"5.  {tx_name} width_narrow   {tx.width_narrow:.3f} dbm\n"
-            f"6.  {tx_name} width_wide     {tx.width_wide:.3f} dbm\n"
-            f"\nSelect parameter number to modify from the above menu, \"tg\" to switch transmitter:\n"
-        )
-
-        user_input = input()
-        if user_input.strip().lower() == "tg":
-            tx_choice = 2 if tx_choice == 1 else 1
-            print(f"\nSwitched to Tx{tx_choice}")
-            continue
-        try:
-            choice = int(user_input)
-        except ValueError:
-            print("Choice must be a number between 1-6, \"tg\" to switch transmitter")
-            continue
-        if not 1 <= choice <= 6:
-            print("Choice must be a number between 1-6")
-            continue
-
-        result = None
-        match choice:
-            case 1:
-                print(f"Modifying cl_ddm {tx_name}, current value is {tx.current_DDM}\n")
-                result = modifyClddm(tx, transmitters)
-            case 2:
-                print(f"Modifying psb {tx_name}, current value is {tx.current_Psb}\n")
-                result = modifyPsb(tx, transmitters)
-            case 3:
-                print(f"CL_DDM_90 {tx_name}, alarm limit for category {tx.category}  is {tx.clddm_90}\n")
-                result = modifyClddm90(tx, transmitters)
-            case 4:
-                print(f"CL_DDM_150 {tx_name}, alarm limit for category {tx.category} is {tx.clddm_150}\n")
-                result = modifyClddm150(tx, transmitters)
-            case 5:
-                result = changeCourseWidth(tx, False, transmitters)
-            case 6:
-                result = changeCourseWidth(tx, True, transmitters)
-            case _:
-                print("Invalid choice")
-
-        if result == "tg":
-            tx_choice = 2 if tx_choice == 1 else 1
-            print(f"\nSwitched to Tx{tx_choice}")
-            continue
-        break
+    if result == "tg":
+        tx_choice = 2 if tx_choice == 1 else 1
+        print(f"\nSwitched to Tx{tx_choice}")
